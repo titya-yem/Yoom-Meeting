@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/../public/icons/logo.svg";
+import MobileNav from "./MobileNav";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
   return (
@@ -17,6 +19,13 @@ const Navbar = () => {
           Yoom
         </p>
       </Link>
+      <div className="flex justify-between items-center gap-5">
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+
+        <MobileNav />
+      </div>
     </nav>
   );
 };
