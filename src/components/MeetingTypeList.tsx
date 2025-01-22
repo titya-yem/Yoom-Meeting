@@ -6,6 +6,7 @@ import MeetingModal from "./MeetingModal";
 import { useUser } from "@clerk/nextjs";
 import { Call, useStreamVideoClient } from "@stream-io/video-react-sdk";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const MeetingTypeList = () => {
   const [meetingState, setMeetingState] = useState<
@@ -29,11 +30,16 @@ const MeetingTypeList = () => {
   });
 
   const [callDetails, setCallDetails] = useState<Call | null>(null);
+  const { toast } = useToast();
 
   const createMeeting = async () => {
     if (!user || !client) return;
 
     try {
+      if (!values.dateTime) {
+        toast({ title: "Please select a date and time" });
+        return;
+      }
       const id = crypto.randomUUID();
       const call = client.call("default", id);
 
@@ -56,8 +62,12 @@ const MeetingTypeList = () => {
       if (!values.description) {
         router.push(`/meeting/${call.id}`);
       }
+      toast({ title: "Meeting has created" });
     } catch (error) {
       console.error(error);
+      toast({
+        title: "Fialed to create meeting room",
+      });
     }
   };
 
