@@ -1,10 +1,12 @@
 import { cn } from "@/lib/utils";
 import {
   CallControls,
+  CallingState,
   CallParticipantsList,
   CallStatsButton,
   PaginatedGridLayout,
   SpeakerLayout,
+  useCallStateHooks,
 } from "@stream-io/video-react-sdk";
 import { useState } from "react";
 import {
@@ -13,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LayoutList, User } from "lucide-react";
+import { LayoutList, Loader, User } from "lucide-react";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { useSearchParams } from "next/navigation";
 import EndCallButton from "./EndCallButton";
@@ -25,6 +27,10 @@ const MeetingRoom = () => {
   const [showParticipants, setShowParticipants] = useState(false);
   const searchParams = useSearchParams();
   const isPersonalRoom = !!searchParams.get("personal");
+  const { useCallCallingState } = useCallStateHooks();
+  const callingState = useCallCallingState();
+
+  if (callingState !== CallingState.JOINED) return <Loader />;
 
   const CallLayout = () => {
     switch (layout) {
@@ -55,7 +61,7 @@ const MeetingRoom = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 flex w-full justify-center items-center gap-5">
+      <div className="fixed bottom-0 flex w-full justify-center items-center gap-5 flex-wrap">
         <CallControls />
 
         <DropdownMenu>

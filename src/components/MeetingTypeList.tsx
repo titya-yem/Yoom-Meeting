@@ -107,7 +107,7 @@ const MeetingTypeList = () => {
       <MeetingModal
         isOpen={meetingState === "isInstantMeeting"}
         onClose={() => setMeetingState(undefined)}
-        title="Start an Instant Meeting"
+        title="Start a new Meeting"
         className="text-center"
         buttonText="Start meeting"
         handleClick={createMeeting}

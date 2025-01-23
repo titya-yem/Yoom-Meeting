@@ -1,6 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/ui/Sidebar";
+import { Metadata } from "next";
 import { PropsWithChildren } from "react";
+
+export const metadata: Metadata = {
+  title: "Yoom meeting",
+  description: "a newer generation of meeting app",
+  icons: {
+    icon: "/icons/logo.svg",
+  },
+};
 
 const HomeLayout = ({ children }: PropsWithChildren) => {
   return (
