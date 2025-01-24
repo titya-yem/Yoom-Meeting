@@ -1,9 +1,6 @@
-//@ts-nocheck
-
 "use client";
 
 import { Call, CallRecording } from "@stream-io/video-react-sdk";
-
 import Loader from "./Loader";
 import { useGetCalls } from "@/hooks/useGetCalls";
 import MeetingCard from "./MeetingCard";
@@ -13,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
   const router = useRouter();
-  const { endedCalls, upcomingCalls, callRecordings, isLoading } =
+  const { endedCalls, upcomingCalls, CallRecordings, isLoading } =
     useGetCalls();
   const [recordings, setRecordings] = useState<CallRecording[]>([]);
   const { toast } = useToast();
@@ -48,7 +45,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
     const fetchRecordings = async () => {
       try {
         const callData = await Promise.all(
-          callRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
+          CallRecordings?.map((meeting) => meeting.queryRecordings()) ?? []
         );
 
         const recordings = callData
@@ -56,6 +53,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
           .flatMap((call) => call.recordings);
         setRecordings(recordings);
       } catch (error) {
+        console.error("Error fetching recordings: ", error);
         toast({ title: "Please try again later" });
       }
     };
@@ -63,7 +61,7 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
     if (type === "recordings") {
       fetchRecordings();
     }
-  }, [type, callRecordings, toast]);
+  }, [type, CallRecordings, toast]);
 
   if (isLoading) return <Loader />;
 
@@ -73,9 +71,13 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
   return (
     <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
       {calls && calls.length > 0 ? (
-        calls.map((meeting: Call | CallRecording) => (
+        calls.map((meeting: Call | CallRecording, index: number) => (
           <MeetingCard
-            key={(meeting as Call).id}
+            key={
+              (meeting as Call).id ||
+              (meeting as CallRecording).filename ||
+              `fallback-key-${index}`
+            }
             icon={
               type === "ended"
                 ? "/icons/previous.svg"
@@ -104,7 +106,10 @@ const CallList = ({ type }: { type: "ended" | "upcoming" | "recordings" }) => {
             buttonText={type === "recordings" ? "Play" : "Start"}
             handleClick={
               type === "recordings"
-                ? () => router.push(`${(meeting as CallRecording).url}`)
+                ? () =>
+                    router.push(
+                      `/recording/${(meeting as CallRecording).filename}`
+                    )
                 : () => router.push(`/meeting/${(meeting as Call).id}`)
             }
           />
