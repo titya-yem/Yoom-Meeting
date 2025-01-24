@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LayoutList, Loader, User } from "lucide-react";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import EndCallButton from "./EndCallButton";
 
 type CallLayoutType = "grid" | "speaker-left" | "speaker-right";
@@ -29,6 +29,7 @@ const MeetingRoom = () => {
   const isPersonalRoom = !!searchParams.get("personal");
   const { useCallCallingState } = useCallStateHooks();
   const callingState = useCallCallingState();
+  const router = useRouter();
 
   if (callingState !== CallingState.JOINED) return <Loader />;
 
@@ -62,7 +63,7 @@ const MeetingRoom = () => {
       </div>
 
       <div className="fixed bottom-0 flex w-full justify-center items-center gap-5 flex-wrap">
-        <CallControls />
+        <CallControls onLeave={() => router.push("/")} />
 
         <DropdownMenu>
           <div className="flex items-center">
