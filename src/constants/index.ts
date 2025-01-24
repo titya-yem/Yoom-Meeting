@@ -1,34 +1,36 @@
-import { sidebarLinksTypes } from "@/types";
-import Home from "@/../public/icons/Home.svg";
-import UpComming from "@/../public/icons/upcoming.svg";
-import Previous from "@/../public/icons/previous.svg";
-import Recordings from "@/../public/icons/Video.svg";
-import Personal from "@/../public/icons/add-personal.svg";
-
-export const sidebarLinks: sidebarLinksTypes[] = [
+export const sidebarLinks = [
   {
-    label: "Home",
+    imgURL: "/icons/Home.svg",
     route: "/",
-    imgUrl: Home,
+    label: "Home",
   },
+
   {
-    label: "Upcoming",
+    imgURL: "/icons/upcoming.svg",
     route: "/upcoming",
-    imgUrl: UpComming,
+    label: "Upcoming",
   },
   {
-    label: "Previous",
+    imgURL: "/icons/previous.svg",
     route: "/previous",
-    imgUrl: Previous,
+    label: "Previous",
   },
   {
+    imgURL: "/icons/Video.svg",
+    route: "/recordings",
     label: "Recordings",
-    route: "/recording",
-    imgUrl: Recordings,
   },
   {
-    label: "Personal Room",
+    imgURL: "/icons/add-personal.svg",
     route: "/personal-room",
-    imgUrl: Personal,
+    label: "Personal Room",
   },
+];
+
+export const avatarImages = [
+  "/images/avatar-1.jpeg",
+  "/images/avatar-2.jpeg",
+  "/images/avatar-3.png",
+  "/images/avatar-4.png",
+  "/images/avatar-5.png",
 ];
